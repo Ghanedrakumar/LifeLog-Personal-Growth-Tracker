@@ -1,29 +1,58 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import AddLogModal from "../Components/AddLogModal";
+import LogCard from "../Components/LogCard";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const handleLogout = () => navigate("/");
+  const [logs, setLogs] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleAddLog = (newLog) => {
+    setLogs([...logs, newLog]);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+    <div className="min-h-screen bg-gray-100">
+      <div>
+        hii how are You?
+      </div>
+      {/* Navbar */}
+
       <nav className="flex justify-between items-center bg-blue-600 p-4 text-white">
         <h1 className="text-xl font-bold">LifeLog</h1>
         <button
-          onClick={handleLogout}
+          onClick={() => setIsModalOpen(true)}
           className="bg-white text-blue-600 px-3 py-1 rounded"
         >
-          Logout
+          + Add Log
         </button>
       </nav>
 
-      <div className="p-4 text-center">
-        <h2 className="text-2xl font-semibold mb-4">
-          Welcome to Your Dashboard 👋
-        </h2>
-        <p className="text-gray-600">Logs and charts will appear here soon.</p>
+      {/* Content */}
+
+      <div className="p-6">
+        {logs.length === 0 ? (
+          <p className="text-center text-gray-500 mt-10">
+            No logs yet. Click “+ Add Log” to begin.
+          </p>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {logs.map((log, i) => (
+              <LogCard key={i} log={log} />
+            ))}
+          </div>
+        )}
       </div>
+
+      {/* AddLogModal */}
+
+      <AddLogModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddLog={handleAddLog}
+      />
     </div>
+    </>
   );
 };
 
